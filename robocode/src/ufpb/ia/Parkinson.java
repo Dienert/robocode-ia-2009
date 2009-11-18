@@ -33,12 +33,9 @@ public class Parkinson extends AdvancedRobot {
 		setAhead(valorFolga); // Vai pra frente.
 		setTurnRight(valorFolga); // Girando para a direita.
 	}
-    /**
-     * PALMEIRAAAASS!!!!
-     *
-	 **/
+	
 	private void colore() {
-		setBodyColor(Color.GREEN); // Cor do corpo.
+		setBodyColor(Color.RED); // Cor do corpo.
 		setGunColor(Color.WHITE); // Cor da arma.
 		setRadarColor(Color.BLACK); // Cor do radar.
 		setScanColor(Color.CYAN); // Cor do Scanner.
@@ -46,13 +43,12 @@ public class Parkinson extends AdvancedRobot {
 	}
   
 	private void calculaPotenciaTiro(ScannedRobotEvent e) {
-		if (getEnergy() <= 20 || e.getDistance() > 100) {
-			forcaTiro = 2; // Se a energia eh baixa ou o inimigo esta distante, atira com menos forca.
-		} else forcaTiro = Rules.MAX_BULLET_POWER; // Força maxima.
+		if (getEnergy() <= 20) forcaTiro = Rules.MAX_BULLET_POWER;
+		else forcaTiro = 2;
 	}
   
 	public void onScannedRobot(ScannedRobotEvent e) {
-		calculaPotenciaTiro(e); // Escolher a melhor força para o tiro.
+		calculaPotenciaTiro(e);
 		setTurnRight(e.getBearing() + 90 - (30 * direcaoMovimento)); // Se posiciona em angulo em relaçao ao inimigo.
 		double mudarEnergia = energiaAnteriorInimigo - e.getEnergy(); // Flag que indica se o inimigo atirou.
 		if (mudarEnergia > 0 && mudarEnergia <= 3) { // Executado quando o inimigo atira. Inimigo perde de 0 a 3 pontos de energia.
@@ -61,15 +57,23 @@ public class Parkinson extends AdvancedRobot {
 		}
 		direcaoArma = -direcaoArma;
 		setTurnGunRight(valorFolga * direcaoArma); // Reposicionando o canhão.
-		if (quantidadeTirosErrados < 5) {
+		
+		fire(forcaTiro);
+		
+		/*if (quantidadeTirosErrados < 5) {
 			if (e.getDistance() <= 30) {
 				fire(Rules.MAX_BULLET_POWER); // Atira com forçaa máxima se o inimigo estiver perto.
 			} else fire(forcaTiro) ;
 		} else {
 			quantidadeTirosErrados = 0; // Zera os erros.
 			circula(); // Está na hora de circular novamente.
+		}*/
+		
+		energiaAnteriorInimigo = e.getEnergy(); // Verifica com quanto de energia ficou o inimigo.
+		if (quantidadeTirosErrados >= 5) {
+			quantidadeTirosErrados = 0; // Zera os erros
+			circula();
 		}
-		energiaAnteriorInimigo = e.getEnergy(); // Verifica com quanto de energia ficou o inimigo. 
 	}
 	
 	public void onBulletMissed(BulletMissedEvent e) {
@@ -83,8 +87,8 @@ public class Parkinson extends AdvancedRobot {
 	public void onWin(WinEvent e) {
 		setRadarColor(Color.RED); // Cor do radar.
 		for (int i = 1; i <= 360; i++) {
-			turnGunRight(i); // Fica girando o canhão em comemoração a vitória.
-			turnLeft(i); // Gira o Corpo para esquerda.
+			setAhead(100);
+			setAhead(-100);
 		}
 	}
   
@@ -106,6 +110,11 @@ public class Parkinson extends AdvancedRobot {
 		} else {
 			setAhead(200); // Se afasta pra frente.
 			indoPraFrente = true;
+		}
+		if (e.getBearing() > -10 && e.getBearing() < 10) {
+			if (getEnergy() > 30) fire (3);
+			else if (getEnergy() > 15) fire(2);
+			else fire(1);
 		}
 		circula(); // Circula novamente
 	}
