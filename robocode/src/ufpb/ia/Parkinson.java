@@ -1,10 +1,15 @@
 package ufpb.ia;
 
-import java.awt.*;
-import java.awt.geom.*;
 import java.awt.Color;
-import robocode.*;
-import robocode.util.*;
+
+import robocode.AdvancedRobot;
+import robocode.BulletHitEvent;
+import robocode.BulletMissedEvent;
+import robocode.HitRobotEvent;
+import robocode.HitWallEvent;
+import robocode.Rules;
+import robocode.ScannedRobotEvent;
+import robocode.WinEvent;
 
 public class Parkinson extends AdvancedRobot {
 	
@@ -28,13 +33,16 @@ public class Parkinson extends AdvancedRobot {
 		setAhead(valorFolga); // Vai pra frente.
 		setTurnRight(valorFolga); // Girando para a direita.
 	}
-  
+    /**
+     * PALMEIRAAAASS!!!!
+     *
+	 **/
 	private void colore() {
-		setBodyColor(Color.RED); // Cor do corpo.
-		setGunColor(Color.BLACK); // Cor da arma.
-		setRadarColor(Color.WHITE); // Cor do radar.
+		setBodyColor(Color.GREEN); // Cor do corpo.
+		setGunColor(Color.WHITE); // Cor da arma.
+		setRadarColor(Color.BLACK); // Cor do radar.
 		setScanColor(Color.CYAN); // Cor do Scanner.
-		setBulletColor(Color.PINK); // Cor da bala.
+		setBulletColor(Color.WHITE); // Cor da bala.
 	}
   
 	private void calculaPotenciaTiro(ScannedRobotEvent e) {
